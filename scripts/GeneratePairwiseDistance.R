@@ -14,10 +14,6 @@ dat.out <- 'data_output/'
 fig.dir <- 'figures/'
 res.dir <- 'results/'
 
-#--Tree x species matrix with tip abundance per OTU
-otu.97 <- read.csv('../3:4_Combined/data/EM_treexspecies_TipAb_Tree.csv',
-                   as.is = T)
-
 #--Site x species matrix with tip abundance per OTU
 otu.97.site <- read.csv('../3:4_Combined/data/EM_sitexspecies_TipAb_Site.csv', as.is = T)
 otu.97.site[otu.97.site$Site == 'Butterfly trail','Site'] <- 'Butterfly.trail'
@@ -35,38 +31,41 @@ otu.95.site.cb[otu.95.site.cb$site == 'Sunset Trail','site'] <- 'Sunset.Trail'
 otu.95.site.cb[otu.95.site.cb$site == 'Upper Solders Camp Rd.','site'] <- 'Upper.Solders.Camp.Rd.'
 otu.95.site.cb[otu.95.site.cb$site == 'Butterfly trail','site'] <- 'Butterfly.trail'
 
-#========================================================================================#
-# Read in and clean up distance data
-#========================================================================================#
-dat.out <- '../3:4_Combined/data/DistanceMatrix/'
-# clim.dist.site.em <- read.csv(paste0(dat.out,'EM_ClimateDistMatrix_site_pca.csv'),
-#                            row.names = 'X')
-clim.dist.site <- read.csv(paste0(dat.out,'FE_ClimateDistMatrix_site_pca.csv'),
-                           row.names = 'X')
-# env.dist.site <- read.csv(paste0(dat.out,'EM_EnvDistMatrix_site_pca.csv'),
-#                           row.names = 'X')
-env.dist.site <- read.csv(paste0(dat.out,'FE_EnvDistMatrix_site_pca.csv'),
-                           row.names = 'X')
-spatial.dist.site <- read.csv(paste0(dat.out,'all_SpatialDistancesMatrix_site.csv'),
-                              row.names = 'X')
-# spatial.dist.tree <- read.csv(paste0(dat.out,'SpatialDistancesMatrix_tree.csv'),
-#                           row.names = 'X')
-spatial.dist.site.closest.PP <- read.csv('../3:4_Combined/data/DistanceClosestPPForest_site.csv')
+em.pairwise <- read.csv('data/EM_PairwiseDissimilarityMatrix_site.csv', as.is = T)
+em.pairwise[em.pairwise$site1 == 'Sunset Trail','site1'] <- 'Sunset.Trail'
+em.pairwise[em.pairwise$site2 == 'Sunset Trail','site2'] <- 'Sunset.Trail'
+em.pairwise[em.pairwise$site1 == 'Upper Solders Camp Rd.','site1'] <- 'Upper.Solders.Camp.Rd.'
+em.pairwise[em.pairwise$site2 == 'Upper Solders Camp Rd.','site2'] <- 'Upper.Solders.Camp.Rd.'
+em.pairwise[em.pairwise$site1 == 'Butterfly trail','site1'] <- 'Butterfly.trail'
+em.pairwise[em.pairwise$site2 == 'Butterfly trail','site2'] <- 'Butterfly.trail'
 
-# dist.tree <- read.csv('data_output/PairwiseDistance/EnvSpatial_PairwiseDistance_tree.csv')
-# dist.site <- read.csv('data_output/PairwiseDistance/EnvSpatial_PairwiseDistance_site.csv')
-# 
-# #--filter out trees and sites that are not needed
-# # tree
-# dist.tree <- dist.tree[dist.tree$X %in% otu.97$Tree,]
-# dist.tree <- dist.tree[dist.tree$tree2 %in% otu.97$Tree,]
-# 
-# # site
-# dist.site <- dist.site[dist.site$X %in% otu.97$Site,]
-# dist.site <- dist.site[dist.site$site2 %in% otu.97$Site,]
-# 
-# #--Only include distance to Mogollon Rim sites
-# dist.site.mr <- dist.site[dist.site$site2 %in% c('M1','M2','M3','M4','M5','M6','M7','M8','M9'),]
+fe.cb.pairwise <- read.csv('data/FE_CB_PairwiseDissimilarityMatrix_site.csv',
+                           as.is = T)
+fe.cb.pairwise[fe.cb.pairwise$site1 == 'Sunset Trail','site1'] <- 'Sunset.Trail'
+fe.cb.pairwise[fe.cb.pairwise$site2 == 'Sunset Trail','site2'] <- 'Sunset.Trail'
+fe.cb.pairwise[fe.cb.pairwise$site1 == 'Upper Solders Camp Rd.','site1'] <- 'Upper.Solders.Camp.Rd.'
+fe.cb.pairwise[fe.cb.pairwise$site2 == 'Upper Solders Camp Rd.','site2'] <- 'Upper.Solders.Camp.Rd.'
+fe.cb.pairwise[fe.cb.pairwise$site1 == 'Butterfly trail','site1'] <- 'Butterfly.trail'
+fe.cb.pairwise[fe.cb.pairwise$site2 == 'Butterfly trail','site2'] <- 'Butterfly.trail'
+
+fe.cf.pairwise <- read.csv('data/FE_CF_PairwiseDissimilarityMatrix_site_ITS2rarefied.csv',
+                           as.is = T)
+fe.cf.pairwise[fe.cf.pairwise$site1 == 'Sunset Trail','site1'] <- 'Sunset.Trail'
+fe.cf.pairwise[fe.cf.pairwise$site2 == 'Sunset Trail','site2'] <- 'Sunset.Trail'
+fe.cf.pairwise[fe.cf.pairwise$site1 == 'Upper Solders Camp Rd.','site1'] <- 'Upper.Solders.Camp.Rd.'
+fe.cf.pairwise[fe.cf.pairwise$site2 == 'Upper Solders Camp Rd.','site2'] <- 'Upper.Solders.Camp.Rd.'
+fe.cf.pairwise[fe.cf.pairwise$site1 == 'Butterfly trail','site1'] <- 'Butterfly.trail'
+fe.cf.pairwise[fe.cf.pairwise$site2 == 'Butterfly trail','site2'] <- 'Butterfly.trail'
+
+#========================================================================================#
+# Generate dissimilarity matrices for environmental data----
+#========================================================================================#
+em.env <- read.csv('data/EM_EnvFactors_site.csv', as.is = T)
+fe.cb.env <- read.csv('data/FE_CB_EnvFactors_site.csv', as.is = T)
+fe.cf.env <- read.csv('data/FE_CF_EnvFactors_site.csv', as.is = T)
+
+# << EM >> ----
+em.clim.pca <- dist(em.env$clim.pca, )
 
 #========================================================================================#
 # EM Community dissimilarity as a function of distance to contiguous forests: Grouped by site -------
@@ -74,15 +73,13 @@ spatial.dist.site.closest.PP <- read.csv('../3:4_Combined/data/DistanceClosestPP
 #-----------------------------------------------------------------#
 #<< Create similarity index >> ---------------------------
 #-----------------------------------------------------------------#
-# remove outliers
-#otu.jaccard <- otu.97[!otu.97$Tree %in% c('N15','H21'),]
 
+# With all OTUs --------
 #--isolate otu data
-comm.matrix <- otu.97.site[10:length(otu.97.site)]
+comm.matrix <- otu.97.site[17:length(otu.97.site)]
 rownames(comm.matrix) <- otu.97.site$Site
 
-#--comment to include singletons
-comm.matrix <- comm.matrix[colSums(comm.matrix) > 2]
+comm.matrix <- comm.matrix[colSums(comm.matrix) > 0]
 comm.matrix <- comm.matrix[rowSums(comm.matrix) > 0, ] # remove rows with sums of 0
 
 #--distance matrix using jaccard index
@@ -95,19 +92,17 @@ comm.dist.horn.matrix <- as.data.frame(as.matrix(comm.dist.horn))
 comm.dist.matrix$X <- rownames(comm.dist.matrix)
 sim.jaccard <- gather(comm.dist.matrix, 'site2','jaccard.dissimilarity', -X)
 names(sim.jaccard)[1] <- 'site1'
-# isolate mogollon rim comparisons
-#sim.jaccard <- sim.jaccard[sim.jaccard$site2 %in% c('M1','M2','M3','M4','M5','M6','M7','M8','M9'),]
 
 for(i in unique(sim.jaccard$site1)){
   for(t in unique(sim.jaccard$site2)){
-    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'env'] <- 
-      env.dist.site[i, t] 
-    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'clim'] <- 
-      clim.dist.site[i, t] 
-    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'spatial.site'] <- 
-      spatial.dist.site[i, t] 
-    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'horn.dissimilarity'] <- 
-      comm.dist.horn.matrix[i, t] 
+    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'env'] <-
+      env.dist.site[i, t]
+    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'clim'] <-
+      clim.dist.site[i, t]
+    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'spatial.site'] <-
+      spatial.dist.site[i, t]
+    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'horn.dissimilarity'] <-
+      comm.dist.horn.matrix[i, t]
     sim.jaccard[sim.jaccard$site1 == i, 'range'] <- otu.97.site[otu.97.site$Site == i, 'Range']
   }
 }
@@ -194,20 +189,18 @@ varpart(comm.dist.jaccard,
         ~ response$forest.type)
 
 #========================================================================================#
-# FE Community dissimilarity as a function of distance to contiguous forests: Grouped by site -------
+# FE culture-free cmmunity dissimilarity as a function of distance to contiguous forests: Grouped by site -------
 #========================================================================================#
 #-----------------------------------------------------------------#
 #<< Create similarity index >> ---------------------------
 #-----------------------------------------------------------------#
-# remove outliers
-#otu.jaccard <- otu.97[!otu.97$Tree %in% c('N15','H21'),]
 
+# << Greater than or equal to 8 occurences >> ------------
 #--isolate otu data
-comm.matrix <- otu.95.site[11:length(otu.95.site)]
-rownames(comm.matrix) <- otu.95.site$Site
+comm.matrix <- otu.95.site.cf[15:length(otu.95.site.cf)]
+rownames(comm.matrix) <- otu.95.site.cf$Site
 
-#--comment to include singletons
-comm.matrix <- comm.matrix[colSums(comm.matrix) > 8]
+comm.matrix <- comm.matrix[colSums(comm.matrix) >= 8]
 comm.matrix <- comm.matrix[rowSums(comm.matrix) > 0, ] # remove rows with sums of 0
 
 #--distance matrix using jaccard index
@@ -223,12 +216,12 @@ names(sim.jaccard)[1] <- 'site1'
 
 for(i in unique(sim.jaccard$site1)){
   for(t in unique(sim.jaccard$site2)){
-    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'env'] <- 
-      env.dist.site[i, t] 
-    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'clim'] <- 
-      clim.dist.site[i, t] 
-    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'spatial.site'] <- 
-      spatial.dist.site[i, t] 
+    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'env'] <-
+      env.dist.site[i, t]
+    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'clim'] <-
+      clim.dist.site[i, t]
+    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'spatial.site'] <-
+      spatial.dist.site[i, t]
     sim.jaccard[sim.jaccard$site1 == i, 'range'] <- otu.95.site[otu.95.site$Site == i, 'range']
   }
 }
@@ -320,18 +313,17 @@ varpart(comm.dist.jaccard,
 #-----------------------------------------------------------------#
 #<< Create similarity index >> ---------------------------
 #-----------------------------------------------------------------#
-# remove outliers
-#otu.jaccard <- otu.97[!otu.97$Tree %in% c('N15','H21'),]
 
+# << all data >>----
 #--isolate otu data
-comm.matrix <- otu.95.site[12:length(otu.95.site)]
-rownames(comm.matrix) <- otu.95.site$site
+comm.matrix <- otu.95.site.cb[12:length(otu.95.site.cb)]
+rownames(comm.matrix) <- otu.95.site.cb$site
 
 #--comment to include singletons
-comm.matrix <- comm.matrix[colSums(comm.matrix) > 2]
+comm.matrix <- comm.matrix[colSums(comm.matrix) > 0]
 comm.matrix <- comm.matrix[rowSums(comm.matrix) > 0, ] # remove rows with sums of 0
-otu.jaccard <- otu.95.site[rownames(otu.95.site) %in% rownames(comm.matrix),]
-otu.horn <- otu.95.site[rownames(otu.95.site) %in% rownames(comm.matrix),]
+otu.jaccard <- otu.95.site.cb[rownames(otu.95.site.cb) %in% rownames(comm.matrix),]
+otu.horn <- otu.95.site.cb[rownames(otu.95.site.cb) %in% rownames(comm.matrix),]
 
 #--distance matrix using jaccard index
 comm.dist.jaccard <- vegdist(comm.matrix, method = "jaccard", binary = F)
@@ -349,14 +341,16 @@ names(sim.jaccard)[1] <- 'site1'
 
 for(i in unique(sim.jaccard$site1)){
   for(t in unique(sim.jaccard$site2)){
-    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'spatial.site'] <- 
-      spatial.dist.site[i, t] 
+    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'spatial.site'] <-
+      spatial.dist.site[i, t]
     sim.jaccard[sim.jaccard$site1 == i, 'range.1'] <- otu.95.site[otu.95.site$site == i, 'range']
     sim.jaccard[sim.jaccard$site2 == t, 'range.2'] <- otu.95.site[otu.95.site$site == t, 'range']
-    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'horn.dissimilarity'] <- 
-      comm.dist.horn[i, t] 
+    sim.jaccard[sim.jaccard$site1 == i & sim.jaccard$site2 == t, 'horn.dissimilarity'] <-
+      comm.dist.horn[i, t]
   }
 }
+
+
 # range comparison
 for(i in 1:nrow(sim.jaccard)){
   if(sim.jaccard[i,'range.1'] == sim.jaccard[i,'range.2']){sim.jaccard[i,'range.comp'] <- 'Same'

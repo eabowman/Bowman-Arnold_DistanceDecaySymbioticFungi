@@ -14,14 +14,11 @@
 # 1. isolated montane forests (mogollon rim removed), unable to separate local and regional**
 # 2. within a contiguous forest (mogollon rim only, em only)
 
-#========================================================================================#
-# Load libraries and data------------------
-#========================================================================================#
+# Part C presents an alternative statistical method to partial mantel 
 
-#install.packages(c('dplyr','tidyr','vegan','ggplot2','cluster','extrafont))
-library(dplyr);library(tidyr);library(vegan);library(ggplot2)
-library(nlme);library(cluster);library(extrafont)
-font_import()
+#========================================================================================#
+# Load data------------------
+#========================================================================================#
 
 #--file paths
 dat.dir <- './data/'
