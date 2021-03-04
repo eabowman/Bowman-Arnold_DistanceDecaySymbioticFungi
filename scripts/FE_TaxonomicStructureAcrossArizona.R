@@ -12,24 +12,16 @@
 # Load libraries and data------------------
 #========================================================================================#
 
-#install.packages(c('dplyr','tidyr','vegan','ggplot2','cluster','ecodist'))
-library(dplyr);library(tidyr);library(vegan);library(ggplot2);library(nlme);library(cluster);library(ecodist)
-
-#--file paths
-dat.dir <- 'data/'
-fig.dir <- 'figures/'
-res.dir <- 'results/'
-
 fe.cf.data <- read.csv(paste0(dat.dir,'FE_CF_SeqSimTaxonomy.csv'), as.is = T)
-fe.cb.data <- read.csv(paste0(dat.dir,'20200130_FE_CB_SeqSimTaxonomy.csv'), as.is = T)
+fe.cb.data <- read.csv(paste0(dat.dir,'FE_CB_SeqSimTaxonomy.csv'), as.is = T)
 
 # remove nonfocal sites 
 fe.cf.data <- fe.cf.data[!fe.cf.data$Site %in% c('Bear Wallow','Marshall Gulch',
                'Parking pullout South of Rose Canyon','Rose Canyon Rd.','Pullout south of Willow Canyon Rd.',
                'Middle Bear','Green Mountain/Bug Springs'),]
 fe.cb.data <- fe.cb.data[!fe.cb.data$site %in% c('Bear Wallow','Marshall Gulch',
-                                                 'Parking pullout South of Rose Canyon','Rose Canyon Rd.','Pullout south of Willow Canyon Rd.',
-                                                 'Middle Bear','Green Mountain/Bug Springs'),]
+               'Parking pullout South of Rose Canyon','Rose Canyon Rd.','Pullout south of Willow Canyon Rd.',
+               'Middle Bear','Green Mountain/Bug Springs'),]
 
 #--environmental data
 env.cf.data <- read.csv(paste0(dat.dir,'FE_CF_EnvFactors_site.csv'), as.is = T)
@@ -106,7 +98,7 @@ for(i in mrm.env$site){
 # Site
 bio17.site.dist <- vegdist(mrm.env$BIO17, method = 'euclidean')
 bio12.site.dist <- vegdist(mrm.env$BIO12, method = 'euclidean')
-forest.gower <- data.frame(forest.type = mrm.env$forest.type)
+forest.gower <- data.frame(forest.type = as.factor(mrm.env$forest.type))
 forest.site.dist <- daisy(forest.gower, metric = 'gower')
 
 #--Geographical distance to closest PP forest
@@ -137,60 +129,6 @@ for(i in 1:nrow(fe.cb.plot)){
   if(fe.cb.plot[i,'forest'] == 'pine'){
     fe.cb.plot[i,'forest'] <- 'Pine'} else{fe.cb.plot[i,'forest'] <- 'Pine-Douglas fir'}
 }
-
-# Plot by plant community
-fe.cb.plot$forest <- as.factor(fe.cb.plot$forest)
-
-# fe.cb.forest.plot <- ggplot(data = fe.cb.plot,
-#        aes(x = forest,
-#            fill = Class.TBAS)) +
-#   geom_bar(position = "fill") +
-#   ylab("Proportion of \n sequences per class") +
-#   theme_bw() +
-#   xlab(element_blank()) +
-#   scale_fill_manual(values = c('#8c510a','#d8b365','#f6e8c3','#c7eae5','#5ab4ac','#01665e')) +
-#   guides (fill=guide_legend(title=NULL)) +
-#   theme(legend.position='right',
-#         # axis.title.x = element_text(margin = margin(t = 30)),
-#         axis.title.y = element_text(margin = margin(r = 30)),
-#         axis.text.x=element_text(angle = -90, hjust = 0),
-#         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-#         panel.border = element_blank(), axis.line = element_line(),
-#         axis.text = element_text(size=16, color = 'black'),
-#         axis.title = element_text(size = 28),
-#         strip.text.x = element_text(size = 14))
-# 
-# ggsave('FE_CB_Class_forest.pdf', plot = fe.cb.forest.plot, 
-#        device = 'pdf', path = './figures/',
-#        units = 'in', width = 10, height = 7)
-
-# Plot by range, arranged based on MAP (low to high)
-fe.cb.plot$range <- factor(fe.cb.plot$range,
-                                   levels = c('MogollonRim','Bradshaw','Chiricahua',
-                                              'Huachuca','Mingus','Pinaleno','SantaCatalina'))
-
-# fe.cb.range.plot <- ggplot(data = fe.cb.plot,
-#                             aes(x = range,
-#                                 fill = Class.TBAS)) +
-#   geom_bar(position = "fill") +
-#   ylab("Proportion of \n sequences per class") +
-#   theme_bw() +
-#   xlab(element_blank()) +
-#   scale_fill_manual(values = c('#8c510a','#d8b365','#f6e8c3','#c7eae5','#5ab4ac','#01665e')) +
-#   guides (fill=guide_legend(title=NULL)) +
-#   theme(legend.position='right',
-#         # axis.title.x = element_text(margin = margin(t = 30)),
-#         axis.title.y = element_text(margin = margin(r = 30)),
-#         axis.text.x=element_text(angle = -90, hjust = 0),
-#         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-#         panel.border = element_blank(), axis.line = element_line(),
-#         axis.text = element_text(size=16, color = 'black'),
-#         axis.title = element_text(size = 28),
-#         strip.text.x = element_text(size = 14))
-# 
-# ggsave('FE_CB_Class_rangeMAP.pdf', plot = fe.cb.range.plot, 
-#        device = 'pdf', path = './figures/',
-#        units = 'in', width = 10, height = 7)
 
 # Plot by range, arranged based on BIO17 (low to high)
 fe.cb.plot$range <- factor(fe.cb.plot$range,
@@ -309,60 +247,6 @@ fe.cf.data %>%
                        'Arthoniomycetes','Geoglossomycetes','Xylonomycetes','Coniocybomycetes',
                        'Taphrinomycetes,Saccharomycetes,Pneumocystidomycetes,Schizosaccharomycetes,unclassified'),
          !Site == 'Butterfly trail')  -> fe.cf.plot
-
-# Plot by plant community
-fe.cf.plot$forest <- as.factor(fe.cf.plot$forest)
-
-fe.cf.forest.plot <- ggplot(data = fe.cf.plot,
-                            aes(x = forest,
-                                fill = Class.TBAS)) +
-  geom_bar(position = "fill") +
-  ylab("Proportion of \n sequences per class") +
-  theme_bw() +
-  xlab(element_blank()) +
-  scale_fill_manual(values = c('#d8b365','#f6e8c3','#c7eae5','#5ab4ac','#01665e')) +
-  guides (fill=guide_legend(title=NULL)) +
-  theme(legend.position='right',
-        # axis.title.x = element_text(margin = margin(t = 30)),
-        axis.title.y = element_text(margin = margin(r = 30)),
-        axis.text.x=element_text(angle = -90, hjust = 0),
-        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.border = element_blank(), axis.line = element_line(),
-        axis.text = element_text(size=16, color = 'black'),
-        axis.title = element_text(size = 28),
-        strip.text.x = element_text(size = 14))
-
-ggsave('FE_CF_Class_forest.pdf', plot = fe.cf.forest.plot, 
-       device = 'pdf', path = './figures/',
-       units = 'in', width = 10, height = 7)
-
-# Plot by range, arranged based on MAP (low to high)
-# fe.cf.plot$range <- factor(fe.cf.plot$range,
-#                            levels = c('MogollonRim','Bradshaw','Chiricahua',
-#                                       'Huachuca','Mingus','Pinaleno','Santa.Catalina'))
-# 
-# fe.cf.range.plot <- ggplot(data = fe.cf.plot,
-#                            aes(x = range,
-#                                fill = Class.TBAS)) +
-#   geom_bar(position = "fill") +
-#   ylab("Proportion of \n sequences per class") +
-#   theme_bw() +
-#   xlab(element_blank()) +
-#   scale_fill_manual(values = c('#d8b365','#f6e8c3','#c7eae5','#5ab4ac','#01665e')) +
-#   guides (fill=guide_legend(title=NULL)) +
-#   theme(legend.position='right',
-#         # axis.title.x = element_text(margin = margin(t = 30)),
-#         axis.title.y = element_text(margin = margin(r = 30)),
-#         axis.text.x=element_text(angle = -90, hjust = 0),
-#         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-#         panel.border = element_blank(), axis.line = element_line(),
-#         axis.text = element_text(size=16, color = 'black'),
-#         axis.title = element_text(size = 28),
-#         strip.text.x = element_text(size = 14))
-# 
-# ggsave('FE_CF_Class_rangeMAP.pdf', plot = fe.cf.range.plot, 
-#        device = 'pdf', path = './figures/',
-#        units = 'in', width = 10, height = 7)
 
 # Plot by range, arranged based on BIO17 (low to high)
 fe.cf.plot$range <- factor(fe.cf.plot$range,

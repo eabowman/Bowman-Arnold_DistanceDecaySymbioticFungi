@@ -1,0 +1,119 @@
+---
+title: "Read me"
+author: "Dr. Elizabeth Bowman"
+date: "11/20/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+The folders here contain R scripts and data files for the article "Drivers and implications of distance decay differ for ectomycorrhizal and foliar endophytic fungi across an anciently fragmented landscape" written by Elizabeth A. Bowman and A.Elizabeth Arnold.
+
+A. Elizabeth Arnold is the author for correspondence on this article. 
+Address: 1140 E. South Campus Drive
+Forbes 303
+School of Plant Sciences
+The University of Arizona
+Tucson, AZ 85721 USA. 
+Email: arnold@ag.arizona.edu
+
+Elizabeth A. Bowman wrote all scripts for data analysis.
+Email: eabowman@austin.utexas.edu
+
+------------------------------------------------------------------------------------------
+
+Explanation of folders:
+1. The data folder contains all data files used in the R script for analyses with
+explanations of columns.
+2. The figure folder is an output folder where figures generated in the R script will be
+output.
+3. The results folder is an output folder for results tables generated in the R script.
+4. The script folder contains all scripts organized by type of analysis.
+
+Each of these folders contains a 'Read me' file with further explanations.
+
+------------------------------------------------------------------------------------------
+
+The following code will run each analysis and output figures and result tables to their
+appropriate folders.
+
+# Load file paths
+
+```{r file paths}
+#--file path to data directory
+dat.dir <- 'data/'
+fig.dir <- 'figures/'
+res.dir <- 'results/'
+script.dir <- 'script/'
+```
+
+# Load packages  
+
+If you need to install packages, open 'Load_packages.R' and uncomment 'install.packages'
+before running. 
+
+```{r libraries}
+source(paste0(script.dir, "LoadLibraries.R"))
+```
+
+# Distance decay and partial mantel test
+
+The distance decay section only shows the creation of the graphs. All analyses were completed in Jmp using the data used to create graphs. If you would like to use the data as they are graphed, run code up until graph creation to ensure the region of interest (overall, regional, or local) has been filtered.
+
+```{r DistanceDecay}
+source(paste0(script.dir, "DistanceDecay_PartialMantel.R"))
+```
+
+# dbMEM and variation partitioning
+
+We present this method as an alternative to the partial mantel test (see manuscript for explanation). For this analysis, you will also need the function created in varpart2.MEM.R. It is sourced in the dbMEM.R script.
+
+```{r dbMEM}
+source(paste0(script.dir, "dbMEM.R"))
+```
+
+# Ectomycorrhizal diversity and community analyses
+
+```{r EM div comm}
+source(paste0(script.dir, "EM_ProximitytoLargeContiguousForest.R"))
+```
+
+# EM taxonomic analyses
+
+```{r EM tax}
+source(paste0(script.dir, "EM_TaxonomicStructureAcrossArizona.R"))
+```
+
+# Foliar endophyte (FE) diversity and community analyses: culture-free and culture-based
+
+```{r FE div comm}
+source(paste0(script.dir, "FE_CommunityStructureAcrossArizona.R"))
+```
+
+# FE taxonomic analyses
+
+```{r FE tax}
+source(paste0(script.dir, "FE_TaxonomicStructureAcrossArizona.R"))
+```
+
+# Comparison of culture-free and culture-based FE
+
+```{r FE comp}
+source(paste0(script.dir, "ComparisonCultureFreeCultureBased.R"))
+```
+
+# Other
+
+The following scripts helped generate data used in the above analyses, background analyses, and maps.
+
+EnvironmentalDistance.R: Code used to create environmental distance matrices for distance decay analyses.
+GeneratePairwiseDistance.R: Code used to create community pairwise distance matrix for distance decay analyses.
+HuangClimateMap.R: Creates maps used in Figure 1.
+InterRunVariabilityIllumina.R: Assess for variability between Illumina runs by comparing samples sequenced across both Illumina runs.
+Worldclim.R: Downloads worldclim data used in analyses.
+MockCommunity.R: creates Supplementary figure S4.
+Climate.R
+functions.R
+
+
+

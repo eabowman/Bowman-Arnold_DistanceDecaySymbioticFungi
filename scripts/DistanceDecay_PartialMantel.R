@@ -1,5 +1,5 @@
 ## Script created by Liz Bowman January 6, 2020
-## for analysing community data in Sky Island study
+## for analyzing community data in Sky Island study
 ## Includes ectomycorrhizal data and endophyte data
 
 ## For answering 'To what extent are EM and FE dispersal limited?
@@ -14,16 +14,11 @@
 # 1. isolated montane forests (mogollon rim removed), unable to separate local and regional**
 # 2. within a contiguous forest (mogollon rim only, em only)
 
-# Part C presents an alternative statistical method to partial mantel 
+# dbMEM.R script presents an alternative statistical method to partial mantel 
 
 #========================================================================================#
 # Load data------------------
 #========================================================================================#
-
-#--file paths
-dat.dir <- './data/'
-fig.dir <- './figures/'
-res.dir <- './results/'
 
 #--Site x species matrix with tip abundance per OTU
 em.site <- read.csv(paste0(dat.dir,'EM_sitexspecies_TipAb_Site.csv'), as.is = T)
@@ -66,7 +61,7 @@ dist.decay.cb <- read.csv(paste0(dat.dir, 'FE_CB_PairwiseDissimilarityMatrix_sit
 #========================================================================================#
 # Part A: Distance decay ----
 # analyses completed in JMP using Spearman's rho
-# Below are the files to create Fig. 2
+# Below is the code to create Fig. 2
 #========================================================================================#
 
 #--------------------------------------------------------------------#
@@ -548,7 +543,7 @@ ggplot(data = dist.decay.cb.regional.out,
         axis.title = element_text(size = 28),
         strip.text.x = element_text(size = 14))
 
-ggsave('FE_distdecayHorn_CBoverall_regional.pdf', plot = last_plot(), 
+ggsave('FigS1_FE_distdecayHorn_CBoverall_regional.pdf', plot = last_plot(), 
        device = 'pdf', path = './figures/',
        units = 'in', width = 10, height = 7)
 
@@ -573,7 +568,7 @@ ggplot(data = dist.decay.cb.local,
         axis.title = element_text(size = 28),
         strip.text.x = element_text(size = 14))
 
-ggsave('FE_distdecayHorn_CBoverall_local.pdf', plot = last_plot(), 
+ggsave('FigS1_FE_distdecayHorn_CBoverall_local.pdf', plot = last_plot(), 
        device = 'pdf', path = './figures/',
        units = 'in', width = 10, height = 7)
 
@@ -598,13 +593,15 @@ ggplot(data = dist.decay.cb.overall,
         axis.title = element_text(size = 28),
         strip.text.x = element_text(size = 14))
 
-ggsave('FE_distdecayHorn_CBoverall.pdf', plot = last_plot(), 
+ggsave('FigS1_FE_distdecayHorn_CBoverall.pdf', plot = last_plot(), 
        device = 'pdf', path = './figures/',
        units = 'in', width = 10, height = 7)
 
 #========================================================================================#
 # Part B: Partial Mantel ----
 #========================================================================================#
+
+# The output of this data can be found in Table 3 and Supplementary Table S5.
 
 #--------------------------------------------------------------------#
 # Ectomycorrhizal fungi ----
@@ -616,20 +613,20 @@ mogollon.rim <- c('M1','M2','M3','M4','M5','M6','M7','M8','M9')
 #--climate distance matrix
 em.clim <- read.csv(paste0(dat.dir, 'EM_EnvFactors_site.csv'), as.is = T)
 # non mogollon rim
-em.clim.non <- em.clim[!em.clim$site %in% mogollon.rim,]
+em.clim.non <- em.clim[!em.clim$Site %in% mogollon.rim,]
 em.clim.dist.non <- vegdist(em.clim.non$clim.pca, method = 'euclidean')
 # mogollon rim only
-em.clim.mr <- em.clim[em.clim$site %in% mogollon.rim,]
+em.clim.mr <- em.clim[em.clim$Site %in% mogollon.rim,]
 em.clim.dist.mr <- vegdist(em.clim.mr$clim.pca, method = 'euclidean')
 
 #--Environmental matrix
 # non mogollon rim
 em.env.non <- data.frame(clim.pca = em.clim.non$clim.pca,
-                     forest.type = em.clim.non$forest)
+                     forest.type = as.factor(em.clim.non$forest))
 em.env.dist.non <- daisy(em.env.non, metric = 'gower')
 # mogollon rim only
 em.env.mr <- data.frame(clim.pca = em.clim.mr$clim.pca,
-                        forest.type = em.clim.mr$forest)
+                        forest.type = as.factor(em.clim.mr$forest))
 em.env.dist.mr <- daisy(em.env.mr, metric = 'gower')
 
 #--spatial matrix
@@ -764,15 +761,15 @@ write.csv(partial.mantel.MR, paste0(res.dir,'EM_PartialMantel_MRonly.csv'), row.
 mogollon.rim <- c('M1','M2','M3','P3')
 
 #--climate distance matrix
-fe.cf.env <- read.csv('data/FE_CF_EnvFactors_site.csv')
+fe.cf.env <- read.csv(paste0(data.dir,'FE_CF_EnvFactors_site.csv'))
 # mogollon rim removed
 fe.cf.env.non <- fe.cf.env[!fe.cf.env$site %in% mogollon.rim,]
-fe.clim.dist.non <- vegdist(fe.cf.env.non$clim.pca, method = 'euclidean')
+fe.clim.dist.non <- vegdist(fe.cf.env.non$clim.pca, method = 'euclidean')å
 
 #--Environmental matrix 
 # mogollon rim removed
 fe.env.non <- data.frame(clim.pca = fe.cf.env.non$clim.pca,
-                         forest.type = fe.cf.env.non$forest)
+                         forest.type = as.factor(fe.cf.env.non$forest))
 fe.env.dist.non <- daisy(fe.env.non, metric = 'gower')
 
 #--spatial matrix
@@ -830,13 +827,15 @@ write.csv(partial.mantel.fe.noMR, paste0(res.dir,'FE_CF_PartialMantel_WinBtwn_No
 mogollon.rim <- c('M1','M2','M3')
 
 #--climate distance matrix
-env.data <- read.csv('data/FE_CB_EnvFactors_site.csv')
+env.data <- read.csv(paste0(dat.dir,'FE_CB_EnvFactors_site.csv'))
 # remove mogollon rim 
 env.data.non <- env.data[!env.data$range == 'mogollon',]
 fe.clim.dist.non <- vegdist(env.data.non['clim.pca'], method = 'euclidean')
 
 #--Environmental distance matrix 
-fe.env.dist.non <- daisy(env.data.non[c('clim.pca','forest')], metric = 'gower')
+fe.env.non <- data.frame(clim.pca = env.data.non$clim.pca,
+                         forest.type = as.factor(env.data.non$forest))
+fe.env.dist.non <- daisy(fe.env.non, metric = 'gower')
 
 #--spatial matrix
 fe.spatial <- read.csv(paste0(dat.dir,'DistanceMatrix/FE_CB_GeoDistanceMatrix_site.csv'),
@@ -851,7 +850,7 @@ rownames(fe.cb.site.non) <- fe.cb.site.non$site
 # isolate community data, with mogollon rim removed
 fe.cm <- fe.cb.site.non[12:length(fe.cb.site.non)]
 # remove species with less than 8 occurrences
-fe.cm <- fe.cm[colSums(fe.cm) > 2]
+fe.cm <- fe.cm[colSums(fe.cm) >= 4]
 # Jaccard
 jaccard.fe.dist <- vegdist(fe.cm,method = 'jaccard')
 # Morisita-Horn

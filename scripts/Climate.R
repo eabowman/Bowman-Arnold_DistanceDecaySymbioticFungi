@@ -4,20 +4,11 @@
 #=========================================================================================
 # Analysis of climate data
 #=========================================================================================
-#--load libraries
-library(ggplot2)
-#install.packages('cowplot')
-library(cowplot)
-#intall.packages('stats')
-library(stats)
 
 #-----------------------------------------------------------------------------------------
 # load file paths and data
 #-----------------------------------------------------------------------------------------
-#--file paths
-dat.dir <- '~/Documents/PhD/3:4_Combined/data/'
-fig.dir <- '~/Documents/PhD/3:4_Combined/figures/'
-res.dir <- '~/Documents/PhD/3:4_Combined/results/'
+
 #--load data
 sites_cli <- read.csv(paste0(dat.dir, '20190923_SamplingData.csv'), as.is = T, header = T)
 

@@ -15,37 +15,35 @@
 # download climate data from Worldclim using raster package
 #-----------------------------------------------------------------------------------------
 #--path to directory where the climate data downloaded from BIOCLIM site is stored
-dat.dir <- "~/Documents/PhD/3:4_Combined/data/"
-clim.dir <- "~/../../Volumes/THALICTRUM/Worldclim_Arizona/"
-res.dir <- "~/Documents/PhD/3:4_Combined/results/"
+clim.dir <- "~/Dropbox/TechnicalDevelopment/WorldClimData/wc2.1_2.5m_bio/"
 
 #--install and set library
 #--uncomment install packages function if you don't have this package installed
 #install.packages ("raster")
-library (raster)
+library(raster)
 
 # << BIOCLIM VARIABLES >> ----------------------------------------------------------------
 #--load world climate data: for 19 bio variables
 #--no need to change this if you downloaded tile 12
-data.1 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_01.tif'),native = F)
-data.2 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_02.tif'),native = F)
-data.3 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_03.tif'),native = F)
-data.4 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_04.tif'),native = F)
-data.5 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_05.tif'),native = F)
-data.6 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_06.tif'),native = F)
-data.7 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_07.tif'),native = F)
-data.8 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_08.tif'),native = F)
-data.9 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_09.tif'),native = F)
-data.10 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_10.tif'),native = F)
-data.11 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_11.tif'),native = F)
-data.12 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_12.tif'),native = F)
-data.13 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_13.tif'),native = F)
-data.14 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_14.tif'),native = F)
-data.15 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_15.tif'),native = F)
-data.16 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_16.tif'),native = F)
-data.17 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_17.tif'),native = F)
-data.18 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_18.tif'),native = F)
-data.19 <- raster(paste0(clim.dir,'wc2.0_30s_bio/wc2.0_bio_30s_19.tif'),native = F)
+data.1 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_1.tif'),native = F)
+data.2 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_2.tif'),native = F)
+data.3 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_3.tif'),native = F)
+data.4 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_4.tif'),native = F)
+data.5 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_5.tif'),native = F)
+data.6 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_6.tif'),native = F)
+data.7 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_7.tif'),native = F)
+data.8 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_8.tif'),native = F)
+data.9 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_9.tif'),native = F)
+data.10 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_10.tif'),native = F)
+data.11 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_11.tif'),native = F)
+data.12 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_12.tif'),native = F)
+data.13 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_13.tif'),native = F)
+data.14 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_14.tif'),native = F)
+data.15 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_15.tif'),native = F)
+data.16 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_16.tif'),native = F)
+data.17 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_17.tif'),native = F)
+data.18 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_18.tif'),native = F)
+data.19 <- raster(paste0(clim.dir,'wc2.1_2.5m_bio_19.tif'),native = F)
 
 #<< Individual variables >> --------------------------------------------------------------
 #--load world climate data: Precipitation, Tavg
@@ -148,7 +146,6 @@ sites_cli <- as.data.frame(cbind(sites,
 # 
 # sites_cli2 <- sites_cli2[c(1:26, 51, 52)]
 
-sites_cli <- sites_cli[c(1:3,7:9,24,27:45)]
 
 #--write file
-write.csv(sites_cli,'data/20200107_ClimateData.csv', row.names = F)
+write.csv(sites_cli,'data/20201201_ClimateData.csv', row.names = F)

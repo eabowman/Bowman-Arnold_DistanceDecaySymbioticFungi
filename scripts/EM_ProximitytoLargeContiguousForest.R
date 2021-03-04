@@ -7,34 +7,26 @@
 # to environment'?
 # Part A on community composition.
 # Part B on diversity.
-# Part C on abundance
+# Part C on diversity (These analyses were not included in the paper, but are included here for transparency).
 
 #========================================================================================#
 # Load libraries and data------------------
 #========================================================================================#
 
-#install.packages(c('dplyr','tidyr','vegan','ggplot2'))
-library(dplyr);library(tidyr);library(vegan);library(ggplot2);library(nlme)
-
-#--file paths
-dat.dir <- 'data/'
-fig.dir <- 'figures/'
-res.dir <- 'results/'
-
 #--Site x species matrix with tip abundance per OTU
 em.site <- read.csv(paste0(dat.dir,'EM_sitexspecies_TipAb_Site.csv'), as.is = T)
 #--Environmental data
-env.data <- read.csv('data/EM_EnvFactors_site.csv', as.is = T)
+env.data <- read.csv(paste0(dat.dir,'EM_EnvFactors_site.csv'), as.is = T)
 
 #--Distance to closest Ponderosa pine forest
-dist.data <- read.csv('data/DistanceClosestPPForest_site.csv', as.is = T)
+dist.data <- read.csv(paste0(dat.dir,'DistanceClosestPPForest_site.csv'), as.is = T)
 
 #--Diversity data
 em.div <- read.csv(paste0(dat.dir, 'EM_Diversity_site.csv'), as.is = T)
 
-#--Abundance data
-em.abund <- read.csv(paste0(dat.dir, 'EM_Abundance_site.csv'), as.is = T)
-em.abund.tree <- read.csv(paste0(dat.dir, 'EM_Abundance_tree.csv'), as.is = T)
+# #--Abundance data
+# em.abund <- read.csv(paste0(dat.dir, 'EM_Abundance_site.csv'), as.is = T)
+# em.abund.tree <- read.csv(paste0(dat.dir, 'EM_Abundance_tree.csv'), as.is = T)
 
 #--Results table
 em.permanova.results <- data.frame(terms = c('dist.closest.forest','BIO12','forest',
@@ -381,65 +373,65 @@ summary(lm.em.prec)
 
 ## Site data
 # Remove outliers and log transform
-em.abund$log.total.tip <- log(em.abund$total.tip)
-em.abund.out <- em.abund[em.abund$Site %in% c('H1','H5','H6','M1'),]
-
-# multiple linear regression
-lm.em.mult <- lm(abundance ~ dist.closest.forest + BIO12 + forest.type,
-                 data = em.abund)
-all.lm <- summary(lm.em.mult)
-anova.all <- anova(lm.em.mult)
-
-## Tree data
-# Overall 
-# Remove outliers and log transform
-em.abund.tree$log.total.tip <- log(em.abund.tree$total.tip)
-em.abund.tree.out <- em.abund.tree[em.abund.tree$total.tip > 11,]
-
-# multiple linear regression
-lm.em.mult <- lm(log.total.tip ~ dist.closest.forest + BIO12 + forest,
-                 data = em.abund.tree.out)
-all.lm <- summary(lm.em.mult)
-anova.all <- anova(lm.em.mult)
-
-# Plot
-em.abund <- ggplot(em.abund.tree.out, aes(x = BIO12,
-                                          y = log.total.tip)) +
-  geom_point(size = 4) +
-  #facet_grid(. ~ forest.type) +
-  geom_smooth(se = F, method = 'lm', color = 'darkgrey') +
-  xlab('Mean annual precipitation (mm)') +
-  ylab("Log EM abundance") +
-  theme_classic() +
-  theme(legend.position='right',
-        # axis.title.x = element_text(margin = margin(t = 30)),
-        axis.title.y = element_text(margin = margin(r = 30)),
-        #axis.text.x = element_text(angle = 35),
-        panel.spacing = unit(2, "lines"),
-        plot.margin=unit(c(1,1.2,1,1),"cm"),
-        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.border = element_blank(), axis.line = element_line(),
-        axis.text = element_text(size=20, color = 'black'),
-        axis.title = element_text(size = 28),
-        strip.text.x = element_text(size = 14))
-
-ggsave('Fig4C_EM_Abundance_Prec.pdf', plot = em.abund, 
-       device = 'pdf', path = fig.dir,
-       units = 'in', width = 10, height = 7)
-
-## With Mogollon rim removed
-em.abund.tree.out.nomr <- em.abund.tree.out[!em.abund.tree.out$Range == 'MogollonRim',]
-# multiple linear regression
-lm.em.mult <- lm(log.total.tip ~ dist.closest.forest + BIO12 + forest,
-                 data = em.abund.tree.out.nomr)
-all.lm <- summary(lm.em.mult)
-anova.all <- anova(lm.em.mult)
-
-## Only Mogollon rim 
-em.abund.tree.out.mr <- em.abund.tree.out[em.abund.tree.out$Range == 'MogollonRim',]
-# multiple linear regression
-lm.em.mult <- lm(log.total.tip ~  BIO12 + forest,
-                 data = em.abund.tree.out.mr)
-all.lm <- summary(lm.em.mult)
-anova.all <- anova(lm.em.mult)
+# em.abund$log.total.tip <- log(em.abund$total.tip)
+# em.abund.out <- em.abund[em.abund$Site %in% c('H1','H5','H6','M1'),]
+# 
+# # multiple linear regression
+# lm.em.mult <- lm(log.total.tip ~ dist.closest.forest + BIO12 + forest.type,
+#                  data = em.abund)
+# all.lm <- summary(lm.em.mult)
+# anova.all <- anova(lm.em.mult)
+# 
+# ## Tree data
+# # Overall 
+# # Remove outliers and log transform
+# em.abund.tree$log.total.tip <- log(em.abund.tree$total.tip)
+# em.abund.tree.out <- em.abund.tree[em.abund.tree$total.tip > 11,]
+# 
+# # multiple linear regression
+# lm.em.mult <- lm(log.total.tip ~ dist.closest.forest + BIO12 + forest,
+#                  data = em.abund.tree.out)
+# all.lm <- summary(lm.em.mult)
+# anova.all <- anova(lm.em.mult)
+# 
+# # Plot
+# em.abund <- ggplot(em.abund.tree.out, aes(x = BIO12,
+#                                           y = log.total.tip)) +
+#   geom_point(size = 4) +
+#   #facet_grid(. ~ forest.type) +
+#   geom_smooth(se = F, method = 'lm', color = 'darkgrey') +
+#   xlab('Mean annual precipitation (mm)') +
+#   ylab("Log EM abundance") +
+#   theme_classic() +
+#   theme(legend.position='right',
+#         # axis.title.x = element_text(margin = margin(t = 30)),
+#         axis.title.y = element_text(margin = margin(r = 30)),
+#         #axis.text.x = element_text(angle = 35),
+#         panel.spacing = unit(2, "lines"),
+#         plot.margin=unit(c(1,1.2,1,1),"cm"),
+#         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#         panel.border = element_blank(), axis.line = element_line(),
+#         axis.text = element_text(size=20, color = 'black'),
+#         axis.title = element_text(size = 28),
+#         strip.text.x = element_text(size = 14))
+# 
+# ggsave('EM_Abundance_Prec.pdf', plot = em.abund, 
+#        device = 'pdf', path = fig.dir,
+#        units = 'in', width = 10, height = 7)
+# 
+# ## With Mogollon rim removed
+# em.abund.tree.out.nomr <- em.abund.tree.out[!em.abund.tree.out$Range == 'MogollonRim',]
+# # multiple linear regression
+# lm.em.mult <- lm(log.total.tip ~ dist.closest.forest + BIO12 + forest,
+#                  data = em.abund.tree.out.nomr)
+# all.lm <- summary(lm.em.mult)
+# anova.all <- anova(lm.em.mult)
+# 
+# ## Only Mogollon rim 
+# em.abund.tree.out.mr <- em.abund.tree.out[em.abund.tree.out$Range == 'MogollonRim',]
+# # multiple linear regression
+# lm.em.mult <- lm(log.total.tip ~  BIO12 + forest,
+#                  data = em.abund.tree.out.mr)
+# all.lm <- summary(lm.em.mult)
+# anova.all <- anova(lm.em.mult)
 

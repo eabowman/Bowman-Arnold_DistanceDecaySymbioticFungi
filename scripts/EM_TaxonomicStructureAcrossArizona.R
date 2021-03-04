@@ -12,17 +12,8 @@
 # Load libraries and data------------------
 #========================================================================================#
 
-#install.packages(c('dplyr','tidyr','vegan','ggplot2','ecodist'))
-library(dplyr);library(tidyr);library(vegan);library(ggplot2)
-library(nlme);library(ecodist); library(cluster)
-
-#--file paths
-dat.dir <- 'data/'
-fig.dir <- '~/Documents/PhD/3:4_Combined/figures/'
-res.dir <- '~/Documents/PhD/3:4_Combined/results/'
-
 #--Read in taxonomic data for EM
-em.tax.data <- read.csv(paste0(dat.dir, '20190919_AllEMSequences.csv'), as.is = T)
+em.tax.data <- read.csv(paste0(dat.dir, 'AllEMSequences.csv'), as.is = T)
 # Remove non focal sites in Santa Catalina Mts.
 non.focal.scm <- c('Middle Bear','Bear Wallow','Pullout south of Willow Canyon Rd.',
                    'Parking pullout South of Rose Canyon','Green Mountain/Bug Springs',
@@ -347,83 +338,7 @@ em.order.prec <- ggplot(data = em.order.plot.prec,
         axis.title = element_text(size = 28),
         strip.text.x = element_text(size = 14))
 
-ggsave('EM_Order_prec.pdf', plot = em.order.prec, 
+ggsave('Fig4C_EM_Order_prec.pdf', plot = em.order.prec, 
        device = 'pdf', path = './figures/',
        units = 'in', width = 10, height = 7)
 
-
-#----------------------------------------------------------------------------------------#
-# Genus level----
-#----------------------------------------------------------------------------------------#
-em.tax.data %>%
-  filter(!is.na(Genus.i),
-#         !Genus.i %in% c('Amanita','Amphinema','Boletus','Entoloma','Genea','Helvella',
-#                        'Hydnobolites','Hygrophorus','Peziza','Pseudotomentella',
-#                        'Sistotrema','Suillus','Tylospora')) %>%
-        Order.i %in% c('Thelephorales','Russulales','Agaricales')) %>%
-  group_by(Site, Range, Genus.i) %>%
-  summarize(total = sum(MorphologyAbundance)) %>%
-  as.data.frame(.) -> em.tax.tip.genus
-
-#--Ranges ordered by Distance to the closest PP forest--------------------------------------#
-em.genus.plot.dist <- em.tax.tip.genus
-
-# Ordered from low to long distance
-em.genus.plot.dist$Range <- factor(em.genus.plot.dist$Range,
-                                   levels = c('MogollonRim','Flagstaff','MtLemmon','Mingus',
-                                              'Bradshaw','Pinaleno','Huachucas','Hualapai','Chiricahuas'))
-
-em.Genus.dist <- ggplot(data = em.genus.plot.dist,
-                        aes(x = Range,
-                            fill = Genus.i)) +
-  geom_bar(position = "fill") +
-  ylab("Proportion of \n sequences per genus") +
-  theme_bw() +
-  xlab(element_blank()) +
-  #ggtitle("Proportion of Classes by Topography") +
-  guides (fill=guide_legend(title=NULL)) +
-  theme(legend.position='right',
-        # axis.title.x = element_text(margin = margin(t = 30)),
-        axis.title.y = element_text(margin = margin(r = 30)),
-        axis.text.x=element_text(angle = -90, hjust = 0),
-        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.border = element_blank(), axis.line = element_line(),
-        axis.text = element_text(size=16, color = 'black'),
-        axis.title = element_text(size = 28),
-        strip.text.x = element_text(size = 14))
-
-ggsave('EM_Genus_closestPP.pdf', plot = em.Genus.dist, 
-       device = 'pdf', path = './figures/',
-       units = 'in', width = 10, height = 7)
-
-#--Ranges ordered by MAP (low to high)--------------------------------------#
-
-em.genus.plot.prec <- em.tax.genus
-
-# Ordered from low MAP to high MAP
-em.genus.plot.prec$Range <- factor(em.order.plot.prec$Range,
-                                   levels = c('Hualapai','Flagstaff','MogollonRim','Bradshaw',
-                                              'Chiricahuas','Huachucas','Mingus','Pinaleno','MtLemmon'))
-
-em.Genus.prec <- ggplot(data = em.genus.plot.dist,
-                        aes(x = Range,
-                            fill = Genus.i)) +
-  geom_bar(position = "fill") +
-  ylab("Proportion of \n sequences per genus") +
-  theme_bw() +
-  xlab(element_blank()) +
-  #ggtitle("Proportion of Classes by Topography") +
-  guides (fill=guide_legend(title=NULL)) +
-  theme(legend.position='right',
-        # axis.title.x = element_text(margin = margin(t = 30)),
-        axis.title.y = element_text(margin = margin(r = 30)),
-        axis.text.x=element_text(angle = -90, hjust = 0),
-        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.border = element_blank(), axis.line = element_line(),
-        axis.text = element_text(size=16, color = 'black'),
-        axis.title = element_text(size = 28),
-        strip.text.x = element_text(size = 14))
-
-ggsave('EM_Genus_Prec.pdf', plot = em.Genus.prec, 
-       device = 'pdf', path = './figures/',
-       units = 'in', width = 10, height = 7)

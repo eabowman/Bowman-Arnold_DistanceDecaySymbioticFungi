@@ -12,14 +12,6 @@
 # Load libraries and data------------------
 #========================================================================================#
 
-#install.packages(c('dplyr','tidyr','vegan','ggplot2'))
-library(dplyr);library(tidyr);library(vegan);library(ggplot2);library(nlme)
-
-#--file paths
-dat.dir <- 'data/'
-fig.dir <- 'figures/'
-res.dir <- 'results/'
-
 #--Site x species matrix ITS2 rarefied
 fe.site <- read.csv(paste0(dat.dir,'FE_ITS2rarified_sitexspecies.csv'), as.is = T)
 #--environmental data
@@ -156,12 +148,14 @@ fe.permanova.cf.j['F.model'] <- jaccard.adonis$aov.tab$F.Model
 fe.permanova.cf.j['R2'] <- jaccard.adonis$aov.tab$R2
 fe.permanova.cf.j['P'] <- jaccard.adonis$aov.tab$`Pr(>F)`
 
-write.csv(fe.permanova.cf.j, paste0(res.dir,'FE_CF_PermanovaJaccard.csv'),
+write.csv(fe.permanova.cf.j, paste0(res.dir,'Table7_FE_CF_PermanovaJaccard.csv'),
           row.names = F)
 
 #----------------------------------------------------------------#
 # Species richness-----
 #----------------------------------------------------------------#
+
+# Results shown in Table 6.
 
 #--Additive
 fe.cf.lm.a <- lm(spec.richness ~ BIO12 + BIO17 + forest, data = fe.cf.div)
@@ -214,7 +208,7 @@ ggsave('Fig6A_FE_CF_speciesrichness.pdf', plot = cf.specrich,
 comm.matrix <- fe.cb.site[12:length(fe.cb.site)]
 
 #--comment to include singletons
-comm.matrix <- comm.matrix[colSums(comm.matrix) >= 2]
+comm.matrix <- comm.matrix[colSums(comm.matrix) >= 4]
 comm.matrix <- comm.matrix[rowSums(comm.matrix) > 0, ] # remove rows with sums of 0
 otu.jaccard <- fe.cb.site[row.names(comm.matrix),] # keeps same rows in otu.99 metadata as comm.matrix
 
@@ -324,7 +318,7 @@ write.csv(fe.permanova.cb.j, paste0(res.dir,'FE_CB_PermanovaJaccard.csv'),
 comm.matrix <- fe.cb.site[12:length(fe.cb.site)]
 
 #--comment to include singletons
-comm.matrix <- comm.matrix[colSums(comm.matrix) >= 2]
+comm.matrix <- comm.matrix[colSums(comm.matrix) >= 4]
 comm.matrix <- comm.matrix[rowSums(comm.matrix) > 0, ] # remove rows with sums of 0
 otu.horn <- fe.cb.site[row.names(comm.matrix),] # keeps same rows in otu.99 metadata as comm.matrix
 
